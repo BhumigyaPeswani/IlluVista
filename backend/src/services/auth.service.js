@@ -60,6 +60,17 @@ class AuthService {
         return { user, accessToken, refreshToken };
     }
 
+    async googleLogin(user) {
+        const accessToken = await generateAccessToken(user);
+        const refreshToken = generateRefreshToken();
+
+        user.refreshTokens = user.refreshTokens.slice(-4);
+        user.refreshTokens.push(refreshToken);
+        await user.save();
+
+        return { user, accessToken, refreshToken };
+    }
+
     async refreshToken(requestToken) {
         if (!requestToken) throw new Error('Refresh token required');
 

@@ -1,0 +1,22 @@
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dummy_cloud_name',
+    api_key: process.env.CLOUDINARY_API_KEY || 'dummy_api_key',
+    api_secret: process.env.CLOUDINARY_API_SECRET || 'dummy_api_secret',
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'illuvista/artworks',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+        // transformation: [{ width: 1000, crop: 'limit' }] // Optional: resize images
+    },
+});
+
+const upload = multer({ storage: storage });
+
+module.exports = upload;

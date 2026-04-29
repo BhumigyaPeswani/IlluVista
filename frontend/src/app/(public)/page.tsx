@@ -1,32 +1,25 @@
-﻿'use client';
-
 import Hero from "@/components/home/Hero";
 import ArtworkCard from "@/components/ArtworkCard";
 import { Artwork } from "@/types";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-export default function Home() {
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [loading, setLoading] = useState(true);
+async function getFeaturedArtworks(): Promise<Artwork[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/artworks`, { next: { revalidate: 60 } }); // Cache and revalidate every 60s
+    if (!res.ok) return [];
+    const json = await res.json();
+    const data = json.data || [];
+    return Array.isArray(data) ? data.slice(0, 3) : [];
+  } catch (error) {
+    console.error('Failed to fetch artworks:', error);
+    return [];
+  }
+}
 
-  useEffect(() => {
-    const fetchFeatured = async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/artworks`);
-        const json = await res.json();
-        const data = json.data || [];
-        setArtworks(Array.isArray(data) ? data.slice(0, 3) : []);
-      } catch (error) {
-        console.error('Failed to fetch artworks:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFeatured();
-  }, []);
+export default async function Home() {
+  const artworks = await getFeaturedArtworks();
 
   return (
     <main className="min-h-screen">
@@ -44,17 +37,7 @@ export default function Home() {
           </Link>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-[4/5] bg-muted/20 rounded-lg mb-4" />
-                <div className="h-4 bg-muted/20 rounded w-3/4 mb-2" />
-                <div className="h-3 bg-muted/10 rounded w-1/2" />
-              </div>
-            ))}
-          </div>
-        ) : artworks.length > 0 ? (
+        {artworks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {artworks.map((artwork) => (
               <ArtworkCard key={artwork._id || artwork.id} artwork={artwork} />

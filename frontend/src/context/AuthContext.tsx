@@ -34,7 +34,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (res.ok) {
                 const jsonData = await res.json();
-                const newAccessToken = jsonData.data.accessToken;
+                const newAccessToken = jsonData.data?.accessToken;
+                
+                if (!newAccessToken) {
+                    setAccessToken(null);
+                    setUser(null);
+                    document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    return null;
+                }
+                
                 setAccessToken(newAccessToken);
                 // Update cookie for middleware
                 document.cookie = `auth-token=${newAccessToken}; path=/; max-age=86400; SameSite=Lax`;

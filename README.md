@@ -1,166 +1,154 @@
 # 🎨 IlluVista — Digital Art Marketplace
 
-> A full-stack SaaS platform for discovering, showcasing, and purchasing digital artwork. Built with Next.js and Express.js.
+> An immersive, full-stack SaaS platform dedicated to discovering, showcasing, and purchasing high-end digital artwork. Engineered with Next.js, Express.js, and MongoDB.
 
 [![Live Demo](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel)](https://illuvista.vercel.app)
 [![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render)](https://illuvista-api.onrender.com)
 
 ---
 
-## ✨ Features
+## 🌟 Introduction
 
-| Feature | Description |
-|---------|-------------|
-| 🖼️ **Art Gallery** | Browse and filter digital artworks by category |
-| 🔐 **Authentication** | Secure JWT-based login/register with role-based access |
-| 👩‍🎨 **Artist Dashboard** | Upload, manage, and track artwork sales |
-| 🛒 **Cart & Checkout** | Add to cart and purchase artworks seamlessly |
-| 👤 **User Roles** | Admin, Artist, and Buyer with distinct permissions |
-| 📊 **Admin Panel** | Manage users, artworks, and orders |
-| 🔔 **Notifications** | Real-time alerts for sales and comments |
-| 🎯 **Responsive UI** | Fully responsive with smooth animations |
+IlluVista bridges the gap between digital artists and art collectors. Unlike traditional eCommerce platforms, IlluVista is designed specifically for digital mediums, offering a premium viewing experience, secure digital asset delivery, and a seamless checkout process.
 
 ---
 
-## 🏗️ Tech Stack
+## ✨ Core Features
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | Next.js 14, TypeScript, Tailwind CSS, Framer Motion |
-| **Backend** | Express.js, Node.js |
-| **Database** | MongoDB (Mongoose ODM) |
-| **Auth** | JWT (jose), bcryptjs, HTTP-only cookies |
-| **3D/Visuals** | Three.js, React Three Fiber |
-| **Deployment** | Vercel (frontend), Render (backend) |
+- 🖼️ **Immersive Art Gallery:** Optimized server-side rendering (SSR) for lightning-fast browsing of high-resolution digital art.
+- 🔐 **Robust Authentication:** Secure JWT-based auth flows with seamless **Google OAuth** integration for 1-click onboarding.
+- 👩‍🎨 **Artist Dashboard:** A dedicated space for artists to securely upload artworks directly to **Cloudinary**, track sales, and manage inventory.
+- 🛒 **Frictionless Checkout:** Intuitive cart and payment flow designed to maximize conversion rates.
+- 👤 **Role-Based Access Control (RBAC):** Distinct experiences and permissions for Admins, Artists, and Collectors.
+- 🎯 **Premium UI/UX:** Responsive layouts enhanced with Framer Motion animations and sleek Tailwind CSS styling.
+
+---
+
+## 🏗️ Architecture & Technology Stack
+
+IlluVista employs a decoupled **Client-Server Architecture**, separating the presentation layer from the business logic to ensure scalability, security, and maintainability.
+
+### Frontend (Client Layer)
+Built for speed and SEO optimization.
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion
+- **Data Fetching:** Native `fetch` with Next.js Server Components
+
+### Backend (API Layer)
+A stateless, RESTful API designed for high throughput.
+- **Framework:** Express.js (Node.js)
+- **Database:** MongoDB via Mongoose ODM
+- **Authentication:** `passport.js` (Google OAuth 2.0), JWT (jose), and bcryptjs
+- **Media Storage:** Cloudinary (via `multer-storage-cloudinary`)
+- **Security:** Helmet, express-rate-limit, HTTP-only cookies
+
+---
+
+## 🔄 User Flow Lifecycle
+
+### 1. Onboarding
+- A user arrives at IlluVista and chooses to sign up.
+- They select a role: **Collector** or **Artist**.
+- They can register manually or click **"Continue with Google"**.
+- The backend processes the OAuth flow, assigns the chosen role, generates a JWT, sets it in an HTTP-only cookie, and redirects the user to their respective dashboard.
+
+### 2. The Artist Flow
+- An **Artist** navigates to the Artist Dashboard.
+- They fill out the artwork metadata (Title, Price, Medium) and attach a high-resolution image file.
+- Upon submission, the Express backend intercepts the file using `multer`, uploads it directly to **Cloudinary**, and saves the optimized secure URL alongside the metadata in MongoDB.
+
+### 3. The Collector Flow
+- A **Collector** lands on the homepage. Next.js Server Components pre-fetch the featured artworks from the Express API, instantly delivering a fully rendered HTML page with zero loading spinners.
+- The Collector browses the gallery, adds items to their cart, and proceeds to checkout to acquire the digital rights.
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 illuvista/
-├── frontend/            # Next.js client app
+├── frontend/            # Next.js Application
 │   ├── src/
-│   │   ├── app/         # Pages & layouts (App Router)
-│   │   ├── components/  # Reusable UI components
-│   │   ├── context/     # Auth & Cart providers
-│   │   ├── services/    # API service layer
-│   │   └── types/       # TypeScript interfaces
-│   └── public/          # Static assets
+│   │   ├── app/         # App Router (Pages, Layouts, API Routes)
+│   │   ├── components/  # Modular React Components (Hero, Cards, etc.)
+│   │   ├── context/     # Global State (AuthContext, CartContext)
+│   │   └── types/       # TypeScript Definitions
+│   ├── next.config.mjs  # Next.js Config (Cloudinary & Unsplash domains)
+│   └── package.json     # Frontend dependencies
 │
-├── backend/             # Express.js REST API
+├── backend/             # Node.js/Express API
 │   ├── src/
-│   │   ├── routes/      # API endpoints
-│   │   ├── models/      # Mongoose schemas
-│   │   ├── middleware/   # Auth & RBAC
-│   │   └── lib/         # DB, JWT, password utils
-│   └── .env.example     # Environment template
+│   │   ├── controllers/ # Request handlers (Auth, Artworks, Orders)
+│   │   ├── middleware/  # JWT Auth, Validation, Cloudinary Uploads
+│   │   ├── models/      # Mongoose Database Schemas
+│   │   ├── routes/      # Express Route Definitions
+│   │   ├── services/    # Core Business Logic
+│   │   └── index.js     # Server Entry Point
+│   ├── .env.example     # Environment Variables Template
+│   └── package.json     # Backend dependencies
 │
-└── package.json         # Root: runs both via concurrently
+└── package.json         # Root workspace manager
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started Locally
 
 ### Prerequisites
+- Node.js 18+
+- MongoDB instance (Local or Atlas)
+- Cloudinary Account (for image uploads)
+- Google Cloud Console Project (for OAuth)
 
-- **Node.js** 18+
-- **MongoDB** (Atlas or local)
-- **npm** or **yarn**
-
-### 1. Clone the Repository
-
+### 1. Clone & Install
 ```bash
-git clone https://github.com/Bhumit267/Illuvista.git
+git clone https://github.com/your-username/Illuvista.git
 cd Illuvista
-```
-
-### 2. Install All Dependencies
-
-```bash
 npm run install:all
 ```
 
-### 3. Configure Environment Variables
-
-**Backend** — Create `backend/.env`:
+### 2. Environment Configuration
+**Backend (`backend/.env`):**
 ```env
-MONGODB_URI=mongodb+srv://your-connection-string
-JWT_SECRET=your-secret-key
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
 PORT=5000
 FRONTEND_URL=http://localhost:3000
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:5000/api/auth/google/callback
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-**Frontend** — Create `frontend/.env.local`:
+**Frontend (`frontend/.env.local`):**
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
-### 4. Run Both Servers
-
+### 3. Launch Development Servers
 ```bash
 npm run dev
 ```
-
-| Server | URL |
-|--------|-----|
-| Frontend | http://localhost:3000 |
-| Backend API | http://localhost:5000 |
-
----
-
-## 📡 API Endpoints
-
-### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/auth/register` | Register new user |
-| `POST` | `/api/auth/login` | Login with credentials |
-| `GET` | `/api/auth/me` | Get current session |
-| `POST` | `/api/auth/logout` | Logout user |
-
-### Artworks
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/artworks` | List all artworks |
-| `GET` | `/api/artworks/:id` | Get artwork by ID |
-| `POST` | `/api/artworks` | Create artwork (auth) |
-| `PUT` | `/api/artworks/:id` | Update artwork (auth) |
-| `DELETE` | `/api/artworks/:id` | Delete artwork (auth) |
-
-### Orders
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/orders` | Get user's orders (auth) |
-| `POST` | `/api/orders` | Create order (auth) |
-| `PATCH` | `/api/orders/:id/status` | Update status (auth) |
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:5000`
 
 ---
 
 ## 🚢 Deployment
 
-### Frontend → Vercel
-1. Import repository on [vercel.com](https://vercel.com)
-2. Set **Root Directory** to `frontend`
-3. Add env variable: `NEXT_PUBLIC_API_URL` = your backend URL
+**Frontend (Vercel):**
+Connect your GitHub repository to Vercel. Set the Root Directory to `frontend`. Ensure `NEXT_PUBLIC_API_URL` is set to your deployed backend URL.
 
-### Backend → Render
-1. Create **Web Service** on [render.com](https://render.com)
-2. Set **Root Directory** to `backend`
-3. **Build Command**: `npm install`
-4. **Start Command**: `npm start`
-5. Add env variables: `MONGODB_URI`, `JWT_SECRET`, `FRONTEND_URL`
-
----
-
-## 👥 User Roles
-
-| Role | Permissions |
-|------|-------------|
-| **Buyer** | Browse gallery, purchase artworks, view orders |
-| **Artist** | All Buyer perms + upload/manage own artworks, view sales |
-| **Admin** | Full access: manage users, artworks, orders, reports |
+**Backend (Render):**
+Create a new Web Service. Set Root Directory to `backend`. Use `npm install` for the build command and `npm start` for the start command. Add all backend environment variables. Update the `GOOGLE_CALLBACK_URL` and `FRONTEND_URL` to reflect your production domains.
 
 ---
 
@@ -168,8 +156,6 @@ npm run dev
 
 This project is licensed under the MIT License.
 
----
-
 <p align="center">
-  Built with ❤️ by <a href="https://github.com/Bhumit267">Bhumit</a>
+  Built with ❤️ by Bhumit
 </p>

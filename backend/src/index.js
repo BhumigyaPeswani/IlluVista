@@ -27,6 +27,9 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
+// Initialize Passport
+const passport = require('./lib/passport');
+app.use(passport.initialize());
 // Global Rate Limiting
 app.use('/api', limiter);
 

@@ -3,6 +3,7 @@ const router = express.Router();
 const { z } = require('zod');
 const { validate } = require('../middleware/validate');
 const AuthController = require('../controllers/auth.controller');
+const passport = require('../lib/passport');
 
 // --- Zod Schemas ---
 const registerSchema = z.object({
@@ -25,6 +26,19 @@ router.post('/login', validate(loginSchema), AuthController.login);
 
 // POST /api/auth/refresh-token
 router.post('/refresh-token', AuthController.refreshToken);
+
+// GET /api/auth/google
+// Start Google OAuth flow and pass role via state
+router.get('/google', (req, res, next) => {
+    const role = req.query.role || 'BUYER';
+    passport.authenticate('google', { 
+        scope: ['profile', 'email'], 
+        state: role 
+    })(req, res, next);
+});
+
+// GET /api/auth/google/callback
+router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL}/login?error=GoogleAuthFailed` }), AuthController.googleCallback);
 
 // GET /api/auth/me
 router.get('/me', AuthController.me);

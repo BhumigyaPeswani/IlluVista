@@ -10,6 +10,7 @@ export default function NewArtworkPage() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [dragActive, setDragActive] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ export default function NewArtworkPage() {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setImageFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result as string);
@@ -47,6 +49,7 @@ export default function NewArtworkPage() {
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             const file = e.dataTransfer.files[0];
+            setImageFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result as string);
@@ -60,22 +63,21 @@ export default function NewArtworkPage() {
         setIsLoading(true);
 
         try {
-            const payload = {
-                title: formData.title,
-                description: formData.description,
-                price: parseFloat(formData.price),
-                category: formData.medium, // Mapping 'medium' to 'category'
-                imageUrl: preview,
-                year: parseInt(formData.year),
-                status: 'listed'
-            };
+            const submitData = new FormData();
+            submitData.append('title', formData.title);
+            submitData.append('description', formData.description);
+            submitData.append('price', formData.price);
+            submitData.append('category', formData.medium);
+            submitData.append('year', formData.year);
+            submitData.append('status', 'listed');
+            
+            if (imageFile) {
+                submitData.append('image', imageFile);
+            }
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/artworks`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
+                body: submitData,
                 credentials: 'include' // Important for sending cookies
             });
 
@@ -133,7 +135,10 @@ export default function NewArtworkPage() {
                                     />
                                     <button
                                         type="button"
-                                        onClick={() => setPreview(null)}
+                                        onClick={() => {
+                                            setPreview(null);
+                                            setImageFile(null);
+                                        }}
                                         className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur shadow-sm rounded-full hover:bg-white transition-colors border"
                                     >
                                         <X className="w-4 h-4" />

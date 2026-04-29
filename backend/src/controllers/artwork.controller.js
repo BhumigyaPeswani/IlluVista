@@ -25,7 +25,11 @@ class ArtworkController {
 
     async create(req, res, next) {
         try {
-            const artwork = await ArtworkService.createArtwork(req.body, req.user.userId);
+            const data = { ...req.body };
+            if (req.file) {
+                data.imageUrl = req.file.path; // Cloudinary secure URL
+            }
+            const artwork = await ArtworkService.createArtwork(data, req.user.userId);
             return ApiResponse.created(res, artwork);
         } catch (error) {
             next(error);
@@ -34,7 +38,11 @@ class ArtworkController {
 
     async update(req, res, next) {
         try {
-            const artwork = await ArtworkService.updateArtwork(req.params.id, req.body, req.user.userId);
+            const data = { ...req.body };
+            if (req.file) {
+                data.imageUrl = req.file.path;
+            }
+            const artwork = await ArtworkService.updateArtwork(req.params.id, data, req.user.userId);
             return ApiResponse.success(res, artwork);
         } catch (error) {
             if (error.message === 'Artwork not found') return ApiResponse.error(res, error.message, 404);

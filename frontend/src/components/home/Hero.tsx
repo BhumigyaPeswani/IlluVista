@@ -2,12 +2,22 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Hero() {
     return (
         <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
             {/* Background (Placeholder for 3D Canvas later) */}
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center">
+            <div className="absolute inset-0">
+                <Image 
+                    src="https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2670&auto=format&fit=crop"
+                    alt="Abstract colorful art background"
+                    fill
+                    priority
+                    quality={85}
+                    className="object-cover object-center"
+                    sizes="100vw"
+                />
                 <div className="absolute inset-0 bg-black/40" /> {/* Overlay */}
             </div>
 

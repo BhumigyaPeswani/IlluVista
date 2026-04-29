@@ -53,10 +53,44 @@ class AuthController {
             setRefreshTokenCookie(res, newRefreshToken.token);
             return ApiResponse.success(res, { accessToken });
         } catch (error) {
+            if (error.message === 'Refresh token required') {
+                return res.status(200).json({ success: false, error: 'No session' });
+            }
             if (error.message === 'Invalid or expired refresh token') {
                 res.clearCookie('refresh-token', { path: '/api/auth/refresh-token' });
-                return ApiResponse.error(res, error.message, 403);
+                return res.status(200).json({ success: false, error: 'Session expired' });
             }
+            next(error);
+        }
+    }
+
+    async googleCallback(req, res, next) {
+        try {
+            if (!req.user) {
+                return res.redirect(`${process.env.FRONTEND_URL}/login?error=GoogleAuthFailed`);
+            }
+
+            const { accessToken, refreshToken } = await AuthService.googleLogin(req.user);
+            
+            // Set refresh token cookie
+            setRefreshTokenCookie(res, refreshToken.token);
+
+            // Set the auth-token cookie (same as frontend does)
+            res.cookie('auth-token', accessToken, {
+                maxAge: 86400 * 1000,
+                path: '/',
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production'
+            });
+
+            // Determine redirect path
+            const role = req.user.role;
+            let redirectPath = '/';
+            if (role === 'ADMIN') redirectPath = '/admin';
+            else if (role === 'ARTIST') redirectPath = '/dashboard';
+
+            res.redirect(`${process.env.FRONTEND_URL}${redirectPath}`);
+        } catch (error) {
             next(error);
         }
     }
