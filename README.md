@@ -2,13 +2,7 @@
 
 > An immersive, full-stack SaaS platform dedicated to discovering, showcasing, and purchasing high-end digital artwork. Engineered with Next.js, Express.js, and MongoDB.
 
-[![Live Demo](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel)](https://illuvista.vercel.app)
-[![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render)](https://illuvista-api.onrender.com)
 
-**🌐 Live Demo:** [https://illuvista.vercel.app](https://illuvista.vercel.app)  
-**⚙️ Backend API:** [https://illuvista-api.onrender.com](https://illuvista-api.onrender.com)
-
----
 
 ## 🌟 Introduction
 

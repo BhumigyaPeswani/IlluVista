@@ -49,6 +49,11 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api', socialRoutes);
 
+// Default route
+app.get('/', (req, res) => {
+    res.send('hello from the backend');
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ success: true, status: 'ok', message: 'IlluVista API is running' });
