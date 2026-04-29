@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://illu-vista.vercel.app/sitemap.xml
