@@ -4,7 +4,7 @@ import ArtworkCard from "@/components/ArtworkCard";
 import { Artwork } from "@/types";
 import { useEffect, useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 const CATEGORIES = ['All', 'Digital 3D', 'Generative', 'Photography', 'Digital Painting', 'Illustration'];
 

@@ -2,7 +2,7 @@
  * Auth Service
  * Centralized logic for authentication API calls.
  */
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export const authService = {
     /**

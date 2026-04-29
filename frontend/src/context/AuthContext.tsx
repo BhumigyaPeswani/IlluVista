@@ -4,7 +4,7 @@ import { createContext, useContext, useState, ReactNode, useEffect, useCallback 
 import { User } from '@/types';
 import { useRouter } from 'next/navigation';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 interface AuthContextType {
     user: User | null;
