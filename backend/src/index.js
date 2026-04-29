@@ -15,30 +15,22 @@ const app = express();
 app.set('trust proxy', 1); // Trust first proxy (Render/Vercel)
 const PORT = process.env.PORT || 5000;
 
-// Security Middleware
-app.use(helmet()); // Set security HTTP headers
-app.use(require('compression')()); // Compress all responses
-const allowedOrigins = [
-    process.env.FRONTEND_URL,
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'https://illu-vista.vercel.app'
-].filter(Boolean);
-
+// Move CORS to the top
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(null, true); // Fallback to allow if something is weird, but usually strict is better. 
-            // Actually, let's just add the user's specific port to the list above.
-        }
+        // Automatically allow any origin that hits the server
+        callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With']
 }));
+
+// Security Middleware
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+})); // Set security HTTP headers with permissive policy for CORS
+app.use(require('compression')()); // Compress all responses
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
