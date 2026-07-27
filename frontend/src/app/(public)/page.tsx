@@ -11,7 +11,7 @@ async function getFeaturedArtworks(): Promise<Artwork[]> {
     if (!res.ok) return [];
     const json = await res.json();
     const data = json.data || [];
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data) ? data.slice(0, 3) : [];
   } catch (error) {
     console.error('Failed to fetch artworks:', error);
     return [];

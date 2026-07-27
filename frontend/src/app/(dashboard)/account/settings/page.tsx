@@ -60,23 +60,8 @@ export default function SettingsPage() {
         <div className="max-w-4xl mx-auto py-8 px-6">
             <h1 className="text-3xl font-serif font-bold mb-8">Account Settings</h1>
 
-            <div className="grid md:grid-cols-3 gap-8">
-                {/* Sidebar / Navigation (Optional for future expansion) */}
-                <div className="md:col-span-1 space-y-2">
-                    <button className="w-full text-left px-4 py-2 bg-accent/10 text-accent font-medium rounded-lg">
-                        Profile
-                    </button>
-                    <button className="w-full text-left px-4 py-2 hover:bg-muted/5 text-muted transition-colors rounded-lg">
-                        Notifications
-                    </button>
-                    <button className="w-full text-left px-4 py-2 hover:bg-muted/5 text-muted transition-colors rounded-lg">
-                        Billing
-                    </button>
-                </div>
-
-                {/* Main Content */}
-                <div className="md:col-span-2 space-y-8">
-                    <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-8">
                         {/* Public Profile */}
                         <div className="bg-card p-6 rounded-2xl border border-muted/20 shadow-sm">
                             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
@@ -183,7 +168,6 @@ export default function SettingsPage() {
                             </button>
                         </div>
                     </form>
-                </div>
             </div>
         </div>
     );
