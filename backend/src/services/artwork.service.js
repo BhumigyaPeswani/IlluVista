@@ -3,7 +3,7 @@ const Artwork = require('../models/Artwork');
 class ArtworkService {
     async getAllArtworks({ category, limit }) {
         let query = {};
-        if (category) query = { category };
+        if (category) {query = { category };}
 
         let dbQuery = Artwork.find(query)
             .populate('artistId', 'name')

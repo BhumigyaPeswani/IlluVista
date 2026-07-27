@@ -72,7 +72,7 @@ class AuthService {
     }
 
     async refreshToken(requestToken) {
-        if (!requestToken) throw new Error('Refresh token required');
+        if (!requestToken) {throw new Error('Refresh token required');}
 
         const user = await User.findOne({ 'refreshTokens.token': requestToken });
 
@@ -108,9 +108,9 @@ class AuthService {
     }
 
     async getMe(token) {
-        if (!token) return null;
+        if (!token) {return null;}
         const payload = await verifyAccessToken(token);
-        if (!payload) return null;
+        if (!payload) {return null;}
         return User.findById(payload.userId);
     }
 }

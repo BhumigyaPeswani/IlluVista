@@ -16,8 +16,8 @@ class OrderController {
             const order = await OrderService.getOrderById(req.params.id, req.user.userId, req.user.role);
             return ApiResponse.success(res, order);
         } catch (error) {
-            if (error.message === 'Order not found') return ApiResponse.error(res, error.message, 404);
-            if (error.message === 'Unauthorized') return ApiResponse.error(res, error.message, 403);
+            if (error.message === 'Order not found') {return ApiResponse.error(res, error.message, 404);}
+            if (error.message === 'Unauthorized') {return ApiResponse.error(res, error.message, 403);}
             next(error);
         }
     }
@@ -36,7 +36,7 @@ class OrderController {
             const order = await OrderService.updateOrderStatus(req.params.id, req.body.status);
             return ApiResponse.success(res, order);
         } catch (error) {
-            if (error.message === 'Order not found') return ApiResponse.error(res, error.message, 404);
+            if (error.message === 'Order not found') {return ApiResponse.error(res, error.message, 404);}
             next(error);
         }
     }

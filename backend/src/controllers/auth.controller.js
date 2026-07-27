@@ -86,8 +86,8 @@ class AuthController {
             // Determine redirect path
             const role = req.user.role;
             let redirectPath = '/';
-            if (role === 'ADMIN') redirectPath = '/admin';
-            else if (role === 'ARTIST') redirectPath = '/dashboard';
+            if (role === 'ADMIN') {redirectPath = '/admin';}
+            else if (role === 'ARTIST') {redirectPath = '/dashboard';}
 
             res.redirect(`${process.env.FRONTEND_URL}${redirectPath}`);
         } catch (error) {

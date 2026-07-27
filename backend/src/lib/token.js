@@ -38,7 +38,7 @@ function generateRefreshToken() {
 async function verifyAccessToken(token) {
     try {
         const { payload } = await jwtVerify(token, SECRET_KEY);
-        if (payload.type !== 'access') return null;
+        if (payload.type !== 'access') {return null;}
         return payload;
     } catch (error) {
         return null; // Expired or invalid

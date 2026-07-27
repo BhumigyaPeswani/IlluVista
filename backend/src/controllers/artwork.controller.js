@@ -45,8 +45,8 @@ class ArtworkController {
             const artwork = await ArtworkService.updateArtwork(req.params.id, data, req.user.userId);
             return ApiResponse.success(res, artwork);
         } catch (error) {
-            if (error.message === 'Artwork not found') return ApiResponse.error(res, error.message, 404);
-            if (error.message === 'Unauthorized') return ApiResponse.error(res, error.message, 403);
+            if (error.message === 'Artwork not found') {return ApiResponse.error(res, error.message, 404);}
+            if (error.message === 'Unauthorized') {return ApiResponse.error(res, error.message, 403);}
             next(error);
         }
     }
@@ -56,8 +56,8 @@ class ArtworkController {
             await ArtworkService.deleteArtwork(req.params.id, req.user.userId);
             return ApiResponse.success(res, null, 'Artwork deleted successfully');
         } catch (error) {
-            if (error.message === 'Artwork not found') return ApiResponse.error(res, error.message, 404);
-            if (error.message === 'Unauthorized') return ApiResponse.error(res, error.message, 403);
+            if (error.message === 'Artwork not found') {return ApiResponse.error(res, error.message, 404);}
+            if (error.message === 'Unauthorized') {return ApiResponse.error(res, error.message, 403);}
             next(error);
         }
     }
