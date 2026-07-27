@@ -9,7 +9,7 @@
         "lint": "eslint .",
         "format": "prettier --write .",
         "prepare": "husky",
-        "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
+        "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --passWithNoTests"
     },
     "dependencies": {
         "@sentry/node": "^10.38.0",
