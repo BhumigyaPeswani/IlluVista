@@ -1,26 +1,8 @@
 import Hero from "@/components/home/Hero";
-import ArtworkCard from "@/components/ArtworkCard";
-import { Artwork } from "@/types";
+import FeaturedArtworks from "@/components/home/FeaturedArtworks";
 import Link from "next/link";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-async function getFeaturedArtworks(): Promise<Artwork[]> {
-  try {
-    const res = await fetch(`${API_URL}/api/artworks?limit=3`, { next: { revalidate: 60 } }); // Cache and revalidate every 60s
-    if (!res.ok) return [];
-    const json = await res.json();
-    const data = json.data || [];
-    return Array.isArray(data) ? data.slice(0, 3) : [];
-  } catch (error) {
-    console.error('Failed to fetch artworks:', error);
-    return [];
-  }
-}
-
-export default async function Home() {
-  const artworks = await getFeaturedArtworks();
-
+export default function Home() {
   return (
     <main className="min-h-screen">
       <Hero />
@@ -37,17 +19,7 @@ export default async function Home() {
           </Link>
         </div>
 
-        {artworks.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {artworks.map((artwork) => (
-              <ArtworkCard key={artwork._id || artwork.id} artwork={artwork} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16 text-muted">
-            <p>No artworks available yet. Check back soon!</p>
-          </div>
-        )}
+        <FeaturedArtworks />
       </section>
 
       {/* How It Works */}
