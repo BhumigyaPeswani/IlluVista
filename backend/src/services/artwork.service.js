@@ -1,15 +1,20 @@
 const Artwork = require('../models/Artwork');
 
 class ArtworkService {
-    async getAllArtworks({ category }) {
+    async getAllArtworks({ category, limit }) {
         let query = {};
         if (category) query = { category };
 
-        // Optimizations: Use lean() for read-only, populate necessary fields
-        return Artwork.find(query)
+        let dbQuery = Artwork.find(query)
             .populate('artistId', 'name')
-            .sort({ createdAt: -1 })
-            .lean();
+            .sort({ createdAt: -1 });
+
+        if (limit) {
+            dbQuery = dbQuery.limit(parseInt(limit, 10));
+        }
+
+        // Optimizations: Use lean() for read-only, populate necessary fields
+        return dbQuery.lean();
     }
 
     async getArtworkById(id) {

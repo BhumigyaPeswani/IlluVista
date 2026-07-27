@@ -7,11 +7,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 async function getFeaturedArtworks(): Promise<Artwork[]> {
   try {
-    const res = await fetch(`${API_URL}/api/artworks`, { next: { revalidate: 60 } }); // Cache and revalidate every 60s
+    const res = await fetch(`${API_URL}/api/artworks?limit=3`, { next: { revalidate: 60 } }); // Cache and revalidate every 60s
     if (!res.ok) return [];
     const json = await res.json();
     const data = json.data || [];
-    return Array.isArray(data) ? data.slice(0, 3) : [];
+    return Array.isArray(data) ? data : [];
   } catch (error) {
     console.error('Failed to fetch artworks:', error);
     return [];
